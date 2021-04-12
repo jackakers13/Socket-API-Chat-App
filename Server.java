@@ -35,14 +35,31 @@ public class Server {
             System.err.printf("[Error] Failed to create socket on port \"%d\"\n", portnumber);
             return;
         }
+        
+        // Main Loop
+        for(int i = 0; i < 10; i++) {
+        	try {
+				while(!reader.ready()) {}
+				System.out.printf("Recieved \"%s\" from client.\n", reader.readLine());
+			} catch (IOException e) {
+				System.err.printf("[Error] Caught IOException in Main Loop\n");
+			}	
+        }
 
-        // Recieve Message
+        /*// Receive Message
         try {
             System.out.printf("Recieved \"%s\" from client.\n", reader.readLine());
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to read from BufferedReader!\n");
             return;
+        }*/
+        
+        // Close Connection
+        try {
+        	serverSocket.close();
+        } catch (IOException exception) {
+        	System.err.printf("[Error] Failed to Close Socket!\n");
         }
-
+        
     }
 }
