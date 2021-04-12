@@ -33,6 +33,7 @@ public class Server {
             System.out.println("Client Connected!");
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to create socket on port \"%d\"\n", portnumber);
+            return;
         }
 
         // Recieve Message
@@ -40,6 +41,7 @@ public class Server {
             System.out.printf("Recieved \"%s\" from client.\n", reader.readLine());
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to read from BufferedReader!\n");
+            return;
         }
 
     }

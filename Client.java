@@ -25,6 +25,7 @@ public class Client {
             socket = new Socket(hostname, portnumber);
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to create socket with host \"%s\" on port \"%d\"\n", hostname, portnumber);
+            return;
         }
 
         // Send Message
@@ -34,6 +35,7 @@ public class Client {
             writer.flush();
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to send message!\n");
+            return;
         }
         
     }
