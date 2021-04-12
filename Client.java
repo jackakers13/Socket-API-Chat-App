@@ -21,8 +21,6 @@ public class Client {
 
         // Variables
         Socket socket = null;
-        InputStreamReader consoleInputStream;
-        BufferedReader consoleReader;
 
         // Create Socket Connection w/ Server
         try {
@@ -50,6 +48,8 @@ public class Client {
         } catch (IOException exception) {
         	System.err.printf("[Error] Failed to Close Socket!\n");
         }
+        
+        System.out.printf("Client Shutting Down...\n");
         
     }
 	

@@ -40,19 +40,11 @@ public class Server {
         for(int i = 0; i < 10; i++) {
         	try {
 				while(!reader.ready()) {}
-				System.out.printf("Recieved \"%s\" from client.\n", reader.readLine());
+				System.out.printf("Received \"%s\" from client.\n", reader.readLine());
 			} catch (IOException e) {
 				System.err.printf("[Error] Caught IOException in Main Loop\n");
 			}	
         }
-
-        /*// Receive Message
-        try {
-            System.out.printf("Recieved \"%s\" from client.\n", reader.readLine());
-        } catch (IOException exception) {
-            System.err.printf("[Error] Failed to read from BufferedReader!\n");
-            return;
-        }*/
         
         // Close Connection
         try {
@@ -60,6 +52,8 @@ public class Server {
         } catch (IOException exception) {
         	System.err.printf("[Error] Failed to Close Socket!\n");
         }
+        
+        System.out.printf("Server Shutting Down...\n");
         
     }
 }
