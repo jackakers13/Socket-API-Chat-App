@@ -1,7 +1,7 @@
 /* CS4850 Project - Server
  * Student Name: Jack Akers (jdapm8, 12562074)
- * Date: April 4, 2021
- * Program Desciption:
+ * Date: April 12, 2021
+ * Program Description:
  * A simple chat room service comprised of a client and a server that utilize the socket API.
  * Implemented using Java 8; built and tested on Windows 10.
  */
@@ -26,7 +26,7 @@ public class Server {
 
         // Accept Socket Connection from Client
         try {
-            serverSocket = new ServerSocket(4999);
+            serverSocket = new ServerSocket(12074);
             socket = serverSocket.accept();
             inputStream = new InputStreamReader(socket.getInputStream());
             reader = new BufferedReader(inputStream);
