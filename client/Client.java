@@ -50,13 +50,22 @@ public class Client {
     					}
 	    				break;
 	    			case "newuser":
-	    				if(tokenizer.countTokens() == 2) {
-	    					writer.println(input);
-	    	                writer.flush();
-	    				}
-	    				else {
-    						System.err.println("[ERROR] Invalid Parameters for Command \"newuser\"");
-    					}
+	    				if(tokenizer.countTokens() != 2) {
+	    					System.err.println("[ERROR] Invalid Parameters for Command \"newuser\"");
+	    				} else {
+	    					String username = tokenizer.nextToken();
+    						String password = tokenizer.nextToken();
+	    					if(username.length() >= 32) {
+	    						System.err.println("[ERROR] Username must be less than 32 characters");
+			    			}
+			    			else if(password.length() < 4 || password.length() > 8) {
+			    				System.err.println("[ERROR] Password must be between 4 and 8 characters");
+			    			}
+		    				else {
+		    					writer.println(input);
+		    	                writer.flush();
+	    					}
+	    				}	
 	    				break;
 	    			case "send":
 	    				writer.println(input);

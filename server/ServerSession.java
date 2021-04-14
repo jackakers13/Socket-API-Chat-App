@@ -69,13 +69,19 @@ public class ServerSession extends Thread {
 	    						String username = tokenizer.nextToken();
 	    						String password = tokenizer.nextToken();
 	    						AccountManager.loadFromFile();
-	    		    			if(!AccountManager.users.containsKey(username)) {
+	    		    			if(AccountManager.users.containsKey(username)) {
+	    		    				writer.println("[ERROR] That Username is Taken!");
+	    		    			}
+	    		    			else if(username.length() >= 32) {
+	    		    				writer.println("[ERROR] Username must be less than 32 characters");
+	    		    			}
+	    		    			else if(password.length() < 4 || password.length() > 8) {
+	    		    				writer.println("[ERROR] Password must be between 4 and 8 characters");
+	    		    			}
+	    		    			else {
 	    		    				AccountManager.users.put(username, password);
 	    		    				AccountManager.saveToFile();
 	    		    				writer.println("[INFO] User Created Successfully!");
-	    		    			}
-	    		    			else {
-		    						writer.println("[ERROR] That Username is Taken!");
 		    					}
 	    					}
 	    					else {
