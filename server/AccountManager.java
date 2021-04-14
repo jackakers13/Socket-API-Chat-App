@@ -21,10 +21,13 @@ public class AccountManager {
 			  saveToFile();
 		  Scanner reader = new Scanner(file);
 		  while (reader.hasNextLine()) {
-		    String in = reader.nextLine();
-		    if(!in.contentEquals("")) {
-		    	StringTokenizer tokenizer = new StringTokenizer(in, "\t");
-			    users.put(tokenizer.nextToken(), tokenizer.nextToken());	
+		    StringBuilder in = new StringBuilder(reader.nextLine());
+		    if(!in.toString().equals("")) {
+		    	String trimmed = in.substring(1, in.length()-1);
+		    	StringTokenizer tokenizer = new StringTokenizer(trimmed, ", ");
+		    	String username = tokenizer.nextToken();
+		    	String password = tokenizer.nextToken();
+			    users.put(username, password);
 		    }
 		  }
 		  reader.close();
@@ -39,7 +42,7 @@ public class AccountManager {
 		  file.createNewFile(); // Safe to run, doesn't override existing file.
 		  FileWriter writer = new FileWriter(fileName);
 	      for(String user : users.keySet()) {
-	    	  writer.write(String.format("%s\t%s\n", user, users.get(user)));
+	    	  writer.write(String.format("(%s, %s)\n", user, users.get(user)));
 	      }
 	      writer.close();
 		} catch (IOException exception) {
