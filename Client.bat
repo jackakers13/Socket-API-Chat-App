@@ -1,3 +1,3 @@
 @echo off
-javac Client.java
-java Client
+javac client/Client.java
+java client/Client

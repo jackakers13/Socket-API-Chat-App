@@ -1,3 +1,3 @@
 @echo off
-javac Server.java
-java Server
+javac server/*.java
+java server/Server
