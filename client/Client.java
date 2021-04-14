@@ -14,6 +14,8 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.StringTokenizer;
 
+import server.AccountManager;
+
 public class Client {
 	public static void main(String[] args) {
 
@@ -30,15 +32,44 @@ public class Client {
         listenerThread.start();
         
         // Main Loop
+        mainloop:
         while(true) {
         	try {
                 PrintWriter writer = new PrintWriter(session.getSocket().getOutputStream());
                 String input = getInputFromConsole();
-                writer.println(input);
-                writer.flush();
                 StringTokenizer tokenizer = new StringTokenizer(input);
-                String firstToken = tokenizer.nextToken();
-                if(firstToken.equals("logout") || firstToken.equals("shutdown")) break;
+                String command = tokenizer.nextToken();
+                switch(command) {
+	    			case "login":
+	    				if(tokenizer.countTokens() == 2) {
+	    					writer.println(input);
+	    	                writer.flush();
+	    				}
+	    				else {
+    						System.err.println("[ERROR] Invalid Parameters for Command \"login\"");
+    					}
+	    				break;
+	    			case "newuser":
+	    				if(tokenizer.countTokens() == 2) {
+	    					writer.println(input);
+	    	                writer.flush();
+	    				}
+	    				else {
+    						System.err.println("[ERROR] Invalid Parameters for Command \"newuser\"");
+    					}
+	    				break;
+	    			case "send":
+	    				writer.println(input);
+    	                writer.flush();
+	    				break;
+	    			case "logout":
+	    				writer.println(input);
+    	                writer.flush();
+	    				break mainloop;
+	    			default:
+	    				System.err.println("[ERROR] Invalid Command!");
+	    				break;
+                }
             } catch (IOException exception) {
                 System.err.printf("[Error] Failed to send message!\n");            
                 return;
