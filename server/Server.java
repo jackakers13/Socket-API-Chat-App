@@ -1,3 +1,4 @@
+package server;
 /* CS4850 Project - Server
  * Student Name: Jack Akers (jdapm8, 12562074)
  * Date: April 12, 2021
@@ -11,12 +12,13 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.StringTokenizer;
 
 public class Server {
     public static void main(String[] args) {
 
         // Configuration Variables
-        int portnumber = 4999;
+        int portnumber = 12074;
 
         // Variables
         ServerSocket serverSocket = null;
@@ -26,21 +28,38 @@ public class Server {
 
         // Accept Socket Connection from Client
         try {
-            serverSocket = new ServerSocket(12074);
+            serverSocket = new ServerSocket(portnumber);
             socket = serverSocket.accept();
             inputStream = new InputStreamReader(socket.getInputStream());
             reader = new BufferedReader(inputStream);
-            System.out.println("Client Connected!");
+            System.out.printf("Connected to Client %s\n", socket.getRemoteSocketAddress().toString());
         } catch (IOException exception) {
             System.err.printf("[Error] Failed to create socket on port \"%d\"\n", portnumber);
             return;
         }
         
         // Main Loop
-        for(int i = 0; i < 10; i++) {
+        mainloop:
+        while(true) {
         	try {
 				while(!reader.ready()) {}
-				System.out.printf("Received \"%s\" from client.\n", reader.readLine());
+				String in = reader.readLine();
+				System.out.printf("Received \"%s\" from client.\n", in);
+				StringTokenizer tokenizer = new StringTokenizer(in);
+				switch(tokenizer.nextToken()) {
+					case "shutdown": // Not in the spec, here for convenience.
+						break mainloop;
+					case "login":
+						break;
+					case "newuser":
+						break;
+					case "send":
+						break;
+					case "logout":
+						break;
+					default:
+						break;
+				}
 			} catch (IOException e) {
 				System.err.printf("[Error] Caught IOException in Main Loop\n");
 			}	

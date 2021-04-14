@@ -1,3 +1,4 @@
+package client;
 /* CS4850 Project - Client
  * Student Name: Jack Akers (jdapm8, 12562074)
  * Date: April 12, 2021
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.StringTokenizer;
 
 public class Client {
 	public static void main(String[] args) {
@@ -20,22 +22,21 @@ public class Client {
         int portnumber = 12074;
 
         // Variables
-        Socket socket = null;
+        ClientSession session = new ClientSession();
 
         // Create Socket Connection w/ Server
-        try {
-            socket = new Socket(hostname, portnumber);
-        } catch (IOException exception) {
-            System.err.printf("[Error] Failed to create socket with host \"%s\" on port \"%d\"\n", hostname, portnumber);
-            return;
-        }
+        session.connect(hostname, portnumber);
         
         // Main Loop
-        for(int i = 0; i < 10; i++) {
+        while(true) {
         	try {
-                PrintWriter writer = new PrintWriter(socket.getOutputStream());
-                writer.println(getInputFromConsole());
+                PrintWriter writer = new PrintWriter(session.getSocket().getOutputStream());
+                String input = getInputFromConsole();
+                writer.println(input);
                 writer.flush();
+                StringTokenizer tokenizer = new StringTokenizer(input);
+                String firstToken = tokenizer.nextToken();
+                if(firstToken.equals("logout") || firstToken.equals("shutdown")) break;
             } catch (IOException exception) {
                 System.err.printf("[Error] Failed to send message!\n");            
                 return;
@@ -43,12 +44,7 @@ public class Client {
         }
         
         // Close Connection
-        try {
-        	socket.close();
-        } catch (IOException exception) {
-        	System.err.printf("[Error] Failed to Close Socket!\n");
-        }
-        
+        session.close();        
         System.out.printf("Client Shutting Down...\n");
         
     }
