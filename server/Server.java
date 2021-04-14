@@ -9,11 +9,18 @@ package server;
 
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Server {
+	
+	// Static Variables
+	static ArrayList<ServerSession> clients = new ArrayList<>();
+	static int MAXCLIENTS = 3;
+	
     public static void main(String[] args) {
 
         // Configuration Variables
@@ -35,7 +42,7 @@ public class Server {
         	Socket socket = null;
             InputStreamReader inputStream = null;
             OutputStreamWriter outputStream = null;
-            Thread thread = null;
+            ServerSession thread = null;
 
             try {
                 socket = serverSocket.accept();
@@ -46,10 +53,24 @@ public class Server {
                 break;
             }
             
-            thread = new ServerSession(socket, inputStream, outputStream);
-            thread.start();
+            for(int i = 0; i < clients.size(); i++) {
+            	if((!clients.get(i).isAlive()) || clients.get(i).socket.isClosed()) {
+            		clients.remove(i);
+            		break; // Removing breaks indexing, only clear one per pass.
+            	}
+            }
+            if(clients.size() < MAXCLIENTS) {
+            	thread = new ServerSession(socket, inputStream, outputStream);
+            	clients.add(thread);
+                thread.start();
+            }
+            else {
+            	(new PrintWriter(outputStream, true)).println("[ERROR] Server is Full, Please Try Again Later.");
+            	try {
+					socket.close();
+				} catch (IOException ignored) {}
+            }
             
-            while(thread.isAlive()) {} // Limit to only 1 client at a time for V1
         }
         
         

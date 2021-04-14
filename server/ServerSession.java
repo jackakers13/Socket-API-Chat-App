@@ -31,6 +31,7 @@ public class ServerSession extends Thread {
     }
     
     public void run() {
+    	mainloop:
         while(true) {
         	try {
 	    		while(!reader.ready()) {}
@@ -88,26 +89,45 @@ public class ServerSession extends Thread {
 	    				break;
 	    			case "send":
 	    				if(loggedIn) {
-	    					StringBuilder returnMessage = new StringBuilder();
-	    					returnMessage.append("<"+loggedInUser+">");
-	    					while(tokenizer.hasMoreTokens()) returnMessage.append(" " + tokenizer.nextToken());
-	    					writer.println(returnMessage.toString());
+	    					if(tokenizer.countTokens() >= 1) {
+	    						String recipient = tokenizer.nextToken();
+	    						StringBuilder returnMessage = new StringBuilder();
+		    					returnMessage.append("<"+loggedInUser+">");
+		    					while(tokenizer.hasMoreTokens()) returnMessage.append(" " + tokenizer.nextToken());
+		    					writer.println(returnMessage.toString());
+		    					if(recipient.equals("all")) {
+		    						for(ServerSession session : Server.clients) {
+		    	    					if(session.loggedInUser != null && session != this)
+		    	    						session.writer.println(returnMessage.toString());
+		    	    				}
+		    					}
+		    					else {
+		    						for(ServerSession session : Server.clients) {
+		    	    					if(session.loggedInUser != null && session != this && session.loggedInUser.equals(recipient))
+		    	    						session.writer.println(returnMessage.toString());
+		    	    				}
+		    					}
+	    					}
+	    					else {
+	    						writer.println("[ERROR] Invalid Parameters for Command \"send\"");
+	    					}
 	    				}
 	    				else {
     						writer.println("[ERROR] Not Logged In!");
     					}
+	    				break;
+	    			case "who":
+	    				writer.println("[Info] Connected Users:");
+	    				for(ServerSession session : Server.clients) {
+	    					if(session.loggedInUser != null)
+	    						writer.println("[Info] " + session.loggedInUser);
+	    				}
 	    				break;
 	    			case "logout":
-	    				if(loggedIn) {
-	    					loggedIn = false;
-	    					loggedInUser = null;
-	    					socket.close();
-	    					return;
-	    				}
-	    				else {
-    						writer.println("[ERROR] Not Logged In!");
-    					}
-	    				break;
+	    				loggedIn = false;
+    					loggedInUser = null;
+    					socket.close();
+    					break mainloop;
 	    			default:
 	    				writer.println("[ERROR] Invalid Command!");
 	    				break;
@@ -116,6 +136,7 @@ public class ServerSession extends Thread {
 	    		System.err.printf("[Error] Caught IOException in ServerSession Loop\n", this.getName());
 	    	}	
         }
+    	System.out.printf("Closing Thread\n");
     }
     
 }

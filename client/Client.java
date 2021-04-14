@@ -33,7 +33,7 @@ public class Client {
         
         // Main Loop
         mainloop:
-        while(true) {
+        while(!session.getSocket().isClosed()) {
         	try {
                 PrintWriter writer = new PrintWriter(session.getSocket().getOutputStream());
                 String input = getInputFromConsole();
@@ -59,9 +59,18 @@ public class Client {
     					}
 	    				break;
 	    			case "send":
+	    				if(tokenizer.countTokens() >= 1) {
+	    					writer.println(input);
+	    	                writer.flush();
+	    				}
+	    				else {
+    						System.err.println("[ERROR] Invalid Parameters for Command \"send\"");
+    					}
+	    				break;
+	    			case "who":
 	    				writer.println(input);
     	                writer.flush();
-	    				break;
+    	                break;
 	    			case "logout":
 	    				writer.println(input);
     	                writer.flush();
