@@ -3,7 +3,7 @@ package client;
 import java.io.IOException;
 import java.net.Socket;
 
-public class ClientSession {
+public class ClientConnection {
 	
 	private boolean connected = false;
 	private Socket socket = null;

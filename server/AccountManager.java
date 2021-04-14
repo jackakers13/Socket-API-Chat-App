@@ -10,10 +10,10 @@ import java.util.StringTokenizer;
 
 public class AccountManager {
 	
-	HashMap<String, String> users = new HashMap<>();
-	String fileName = "users.txt";
+	static HashMap<String, String> users = new HashMap<>();
+	static String fileName = "users.txt";
 	
-	public void loadFromFile() {
+	public static void loadFromFile() {
 		users.clear();
 		try {
 		  File file = new File(fileName);
@@ -33,7 +33,7 @@ public class AccountManager {
 		}
 	}
 	
-	public void saveToFile() {
+	public static void saveToFile() {
 		try {
 		  File file = new File(fileName);
 		  file.createNewFile(); // Safe to run, doesn't override existing file.

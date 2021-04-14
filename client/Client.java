@@ -21,11 +21,13 @@ public class Client {
         String hostname = "localhost";
         int portnumber = 12074;
 
-        // Variables
-        ClientSession session = new ClientSession();
-
         // Create Socket Connection w/ Server
+        ClientConnection session = new ClientConnection();
         session.connect(hostname, portnumber);
+        
+        // Start Listener Thread
+        ClientListenerThread listenerThread = new ClientListenerThread(session.getSocket());
+        listenerThread.start();
         
         // Main Loop
         while(true) {
@@ -44,7 +46,8 @@ public class Client {
         }
         
         // Close Connection
-        session.close();        
+        listenerThread.stop();
+        session.close();     
         System.out.printf("Client Shutting Down...\n");
         
     }
