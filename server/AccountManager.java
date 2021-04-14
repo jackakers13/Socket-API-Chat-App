@@ -25,11 +25,8 @@ public class AccountManager {
 		    if(!in.toString().equals("")) {
 		    	String trimmed = in.substring(1, in.length()-1);
 		    	StringTokenizer tokenizer = new StringTokenizer(trimmed, ", ");
-		    	System.out.println("[DEBUG] trimmed = " + trimmed);
 		    	String username = tokenizer.nextToken();
 		    	String password = tokenizer.nextToken();
-		    	System.out.println("[DEBUG] username = " + username);
-		    	System.out.println("[DEBUG] password = " + password);
 			    users.put(username, password);
 		    }
 		  }
