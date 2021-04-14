@@ -109,6 +109,7 @@ public class ServerSession extends Thread {
     					}
 	    				break;
 	    			default:
+	    				writer.println("[ERROR] Invalid Command!");
 	    				break;
 	    		}
 	    	} catch (IOException e) {
